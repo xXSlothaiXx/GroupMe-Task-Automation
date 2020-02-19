@@ -104,14 +104,14 @@ def get_groupme_urls():
 	filepath = '/home/licentia/Desktop/groupmebot/scraping/testing'
 	for r, d, file in os.walk(filepath):
 		for x in file:
-			print(x)
-			data = open('image-1.jpeg', 'rb').read()
-			image_request = requests.post(url, data=data, headers={'Content-Type': 'image/jpeg', 'X-Access-Token': '66fb4770467d0137eb6a227a6d5f8ad6' })
-			convert = image_request.text
-			load_json = json.loads(convert)
-			gurl = load_json.get('payload', {}).get("url",{})
-			print(gurl)
-			groupme_image_urls.append(gurl)
+	            print(x)
+		    data = open('image-1.jpeg', 'rb').read()
+		    image_request = requests.post(url, data=data, headers={'Content-Type': 'image/jpeg', 'X-Access-Token': '66fb4770467d0137eb6a227a6d5f8ad6' })
+		    convert = image_request.text
+		    load_json = json.loads(convert)
+		    gurl = load_json.get('payload', {}).get("url",{})
+		    print(gurl)
+		    groupme_image_urls.append(gurl)
 
 
 def get_trump_tweets():
