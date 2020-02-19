@@ -1,0 +1,134 @@
+{% extends "bots/base.html"%}
+{%load crispy_forms_tags%} 
+{%block content%}
+
+<div class="row">
+
+      <!-- Blog Entries Column -->
+      <div class="col-md-8">
+	      <h1 class="my-4">{{bot.name}}
+          <small>Yeet</small>
+        </h1>
+
+
+        <hr>
+
+
+        <br> 
+      <div class="list-group">
+
+        {%for insult in insults%}
+       
+     
+		<a href="#" class="list-group-item list-group-item-action flex-column align-items-start">
+          <div class="d-flex w-100 justify-content-between">
+		  <h5 class="mb-1">{{bot.name}}</h5>
+            <small class="text-muted">{{insult.date_posted}}</small>
+          </div>
+          <p class="mb-1" style="color:  #078ecd; ">{{insult.insult}}</p>
+          <small class="text-muted">Donec id elit non mi porta.</small>
+        </a>
+
+       
+        {%endfor%}
+
+        <br>
+      </div>
+
+      <br> <br> 
+
+        <!-- Pagination -->
+        <ul class="pagination justify-content-center mb-4">
+          <li class="page-item">
+            <a class="page-link" href="#">&larr; Older</a>
+          </li>
+          <li class="page-item disabled">
+            <a class="page-link" href="#">Newer &rarr;</a>
+          </li>
+        </ul>
+
+      </div>
+
+      <!-- Sidebar Widgets Column -->
+      <div class="col-md-4">
+
+         <div class="card my-4">
+          <h5 class="card-header">All bots</h5>
+          <div class="card-body">
+
+            All of bots that are using the insult scraper
+         
+          </div>
+        </div>
+
+      
+
+    
+
+
+        <!-- Side Widget -->
+        <div class="card my-4">
+          <h5 class="card-header">Start Trump Tweet Bot</h5>
+          <div class="card-body">
+
+          
+
+		    <form method="post" action="{%url 'start-trump-bot' %}">
+		 
+		    <div class="radio">
+			    <label><input type="radio" name="bot_id" value="{{bot.bot_id}}">{{bot.name}}</label>
+		    </div>
+		    <hr>
+		    <button type="submit"  class="btn btn-primary">Start {{bot.name}}</button>
+		  </form>
+         
+          </div>
+        </div>
+
+         <!-- Side Widget -->
+        <div class="card my-4">
+          <h5 class="card-header">Start Insult Bot</h5>
+          <div class="card-body">
+
+          
+
+        <form method="post" action="{%url 'start-insult-bot' %}">
+     
+        <div class="radio">
+          <label><input type="radio" name="bot_id" value="{{bot.bot_id}}">{{bot.name}}</label>
+        </div>
+        <hr>
+        <button type="submit"  class="btn btn-primary">Start {{bot.name}}</button>
+      </form>
+         
+          </div>
+        </div>
+
+
+
+         <!-- Side Widget -->
+        <div class="card my-4">
+          <h5 class="card-header">Start Meme Bot</h5>
+          <div class="card-body">
+
+          
+
+        <form method="post" action="{%url 'start-meme-bot' %}">
+     
+        <div class="radio">
+          <label><input type="radio" name="bot_id" value="{{bot.bot_id}}">{{bot.name}}</label>
+        </div>
+        <hr>
+        <button type="submit"  class="btn btn-primary">Start {{bot.name}}</button>
+      </form>
+         
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+    <!-- /.row --> 
+
+
+{%endblock content%}

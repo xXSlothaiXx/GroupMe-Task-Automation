@@ -21,9 +21,7 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^trump/', include('trumpbot.urls')), 
-
-    url(r'^insult/', include('insultbot.urls')),  
+    url(r'^bots/', include('bots.urls')),  
 ] 
 
 if settings.DEBUG:

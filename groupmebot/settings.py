@@ -32,8 +32,7 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     'crispy_forms',
-    'trumpbot.apps.TrumpbotConfig',
-    'insultbot.apps.InsultbotConfig', 
+    'bots.apps.BotsConfig', 
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
