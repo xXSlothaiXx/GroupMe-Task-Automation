@@ -15,7 +15,6 @@ import pandas as pd
 #we are building a meme bot
 #we will get the links from the memes
 #and then we will we add it to the database 
-file_path = 'images/'
 
 image_array = []
 
@@ -29,13 +28,6 @@ categories = ['americana',
         'ragecomics'] 
 
 category_set = categories[0]  
-
-def urls_to_image(i, url, path):
-
-    file = 'image-{}.png'.format(i)
-    full_path = '{}{}'.format(file_path, file)
-    urllib.request.urlretrieve(url, full_path)
-
 
 def get_memes():
     index = 0
@@ -75,7 +67,6 @@ def check_image_type(link, index):
     except UnicodeEncodeError:
         print('error fam')
 
-
 def download_all_images():
     image_index = 0
     for image in image_array:
@@ -84,8 +75,40 @@ def download_all_images():
         image_index = image_index + 1 
         time.sleep(0.5)
         
-get_memes()
-download_all_images()
+
+def get_groupme_urls(): 
+    url = 'https://image.groupme.com/pictures'
+    filepath = '/home/licentia/Desktop/groupmebot/scraping/testing'
+
+    for r, d, file in os.walk(filepath):
+        for x in file:
+            if '.jpeg' in x:
+                data = open('{}/{}'.format(filepath, x), 'rb').read() 
+                image_request = requests.post(url, data=data, headers={'Content-Type': 'image/jpeg', 'X-Access-Token': '66fb4770467d0137eb6a227a6d5f8ad6' })
+                convert = image_request.text
+                load_json = json.loads(convert)
+                gurl = load_json.get('payload', {}).get("picture_url",{})
+                print(gurl)
+                
+            elif '.gif' in x:
+                data = open('{}/{}'.format(filepath, x), 'rb').read()
+                image_request = requests.post(url, data=data, headers={'Content-Type': 'image/gif', 'X-Access-Token': '66fb4770467d0137eb6a227a6d5f8ad6' })
+                convert = image_request.text
+                load_json = json.loads(convert)
+                gurl = load_json.get('payload', {}).get("picture_url",{})
+                print(gurl)
+            elif '.png' in x: 
+                data = open('{}/{}'.format(filepath, x), 'rb').read() 
+                image_request = requests.post(url, data=data, headers={'Content-Type': 'image/png', 'X-Access-Token': '66fb4770467d0137eb6a227a6d5f8ad6' })
+                convert = image_request.text
+                load_json = json.loads(convert)
+                gurl = load_json.get('payload', {}).get("picture_url",{})
+                print(gurl)
+            else: 
+                print('Fuck if i know') 
+
+get_groupme_urls()
+
 
 
 

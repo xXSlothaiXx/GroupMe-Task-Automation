@@ -9,6 +9,8 @@ urlpatterns = [
     #listing data
     url(r'^tweets/', views.view_tweets, name='view-tweets'), 
     url(r'^insults/', views.view_insults, name='view-tweets'),
+    #scraping data 
+    url(r'^scrape/', views.scrape_memes, name='scrape-memes'),
     #start bots
     url(r'^starttrump/', views.start_trump_bot, name='start-trump-bot'),
     url(r'^startinsult/', views.start_insult_bot, name='start-insult-bot'),

@@ -42,3 +42,10 @@ class MemeURL(models.Model):
     def __str__(self):
         return self.url
 
+class GMUrl(models.Model):
+    groupme_url = models.TextField() 
+    date_posted = models.DateTimeField(default=timezone.now) 
+
+
+    def __str__(self): 
+        return self.groupme_url
