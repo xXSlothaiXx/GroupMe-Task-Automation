@@ -190,6 +190,7 @@ def timed_insult_message(selected_bot_id):
         print('Already used')
 
     if Insult.objects.filter(insult=select_insult).exists() == False:
+        #This is where you edit the times for the insult bot
         if current_time == "08:00:00" or current_time == "20:00:00":
             send_message_from_bot(selected_bot_id, select_insult)
             insultmodel = Insult()
@@ -208,6 +209,7 @@ def timed_tweet_message(selected_bot_id):
         print('Already used')
 
     if Tweet.objects.filter(tweet=select_tweet).exists() == False:
+        #This is where you edit the times for the tweet bot. Times that are currently set, 8AM and 8PM 
         if current_time == "08:00:00" or current_time == "20:00:00":
             send_message_from_bot(selected_bot_id, select_tweet)
             tweetmodel = Tweet()
@@ -231,6 +233,7 @@ def timed_meme_message(selected_bot_id):
             print('Already used')
 
         if MemesSent.objects.filter(groupme_url=select_meme).exists() == False:
+            #This is where you edit the times for the meme bot
             if current_time == "16:20:00":
                 send_message_from_bot(selected_bot_id, select_meme)
                 model = MemesSent()
@@ -239,6 +242,13 @@ def timed_meme_message(selected_bot_id):
                 time.sleep(3)
             else:
                 print("Do nothing %s" % current_time)
+
+            #ALTERNATIVELY YOU COULD JUST DO THIS
+            #send_message_from_bot(selected_bot_id, select_meme)
+            #model = MemesSent()
+            #model.groupme_url = select_meme
+            #model.save()
+            #time.sleep(3) Set the timing however you please
 
 ##########################################################
 #VIEW DATA THAT IS BEING STORED
