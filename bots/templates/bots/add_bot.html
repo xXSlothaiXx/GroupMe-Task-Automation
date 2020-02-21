@@ -1,0 +1,36 @@
+{% extends "bots/base.html"%}
+{%load crispy_forms_tags%} 
+{%block content%}
+<br><br> 
+
+<h2> Add Bot </h2>
+<hr> 
+
+<h5> Get your BOT ID's from <a href="https://dev.groupme.com/bots">Here</a></h5>
+
+<p1> Enter the name of the bot followed by the BOT ID </p1>
+<br>
+
+<p2> IF the bot id is wrong, messages will not send properly </p2>
+<br>
+<p2> MAKE SURE THERE ARE NO SPACES when entering the bot id</p2>
+
+<br> <br> <br>
+<div class="container">
+
+	<form  method="post" enctype="multipart/form-data">
+            {%csrf_token%}
+            <div class="form-group">
+
+              {{bot_form|crispy}}
+
+            </div>
+
+            <button type="submit" class="btn btn-primary">Create Bot</button>
+          </form>
+
+</div>
+
+<br> <br> 
+
+{%endblock content%}

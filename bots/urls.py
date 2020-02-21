@@ -3,6 +3,8 @@ from django.contrib import admin
 from . import views
 
 urlpatterns = [
+    #create bot
+    url(r'^create/', views.add_bot, name='add-bot'),
     #listing bots
     url(r'^list/', views.bots, name='view-bots'),
     url(r'^bot/(?P<pk>[\w-]+)/$', views.bot_detail, name='bot-detail'),

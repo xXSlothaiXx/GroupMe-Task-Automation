@@ -27,14 +27,6 @@ class Tweet(models.Model):
     def __str__(self):
         return self.tweet
 
-
-class Meme(models.Model):
-    meme = models.TextField() 
-    date_posted = models.DateTimeField(default=timezone.now) 
-
-    def __str__(self):
-        return self.meme
-
 class MemeURL(models.Model):
     url = models.TextField() 
     date_posted = models.DateTimeField(default=timezone.now) 
@@ -49,3 +41,11 @@ class GMUrl(models.Model):
 
     def __str__(self): 
         return self.groupme_url
+
+class MemesSent(models.Model):
+    groupme_url = models.TextField()
+    date_posted = models.DateTimeField(default=timezone.now) 
+
+    def __str__(self):
+        return self.groupme_url
+

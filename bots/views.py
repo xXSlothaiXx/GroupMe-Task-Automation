@@ -1,7 +1,9 @@
 from __future__ import unicode_literals
 from django.shortcuts import render, redirect, get_object_or_404
+from django.db.models import Max
 from django.views.decorators.csrf import csrf_exempt
-from  .models import Bot, Tweet, Insult, Meme, MemeURL, GMUrl
+from  .models import Bot, Tweet, Insult, MemesSent, MemeURL, GMUrl
+from .forms import BotForm
 import time
 import requests
 import time
@@ -12,18 +14,23 @@ import urllib.request
 import random
 from datetime import datetime
 
-access_token = '66fb4770467d0137eb6a227a6d5f8ad6'
+THIS_FOLDER = os.path.dirname(os.path.abspath(__file__))
+access_token_file = os.path.join(THIS_FOLDER, 'access-token.txt')
+for line in access_token_file:
+    fields = line.strip().split()
+
+access_token = fields[0]
+
 all_tweets = []
 memes = []
 groupme_image_urls = []
 insults = []
-used_urls = [] 
 
 ##########################################################
 #METHOD FOR SENDING
 ##########################################################
 def send_message_from_bot(botid, message):
-    URL = "https://api.groupme.com/v3/bots/post?token=66fb4770467d0137eb6a227a6d5f8ad6"
+    URL = "https://api.groupme.com/v3/bots/post?token=%s" % access_token
 
     PARAMS = {
             'bot_id': botid,
@@ -74,18 +81,19 @@ def get_memes():
         index = index + 1
 
 def check_image_type(link, index):
-    file_path = '/home/licentia/Desktop/groupmebot/bots/memes'
+    # path would be something like 'home/user/Desktop/groupmebot/bots/memes'
+    file_path = '<ENTER PATH IF YOU WANT TO DOWNLOAD IMAGES AGAIN>'
     try:
         check = requests.get(link)
         content_type = check.headers['content-type']
         if content_type == 'image/gif':
-            urllib.request.urlretrieve(link, '{}/image-0{}.gif'.format(file_path, index))
+            urllib.request.urlretrieve(link, '{}/image-00{}.gif'.format(file_path, index))
         elif content_type == 'image/png':
-            urllib.request.urlretrieve(link, '{}/image-0{}.png'.format(file_path, index))
+            urllib.request.urlretrieve(link, '{}/image-00{}.png'.format(file_path, index))
         elif content_type == 'image/jpg':
-            urllib.request.urlretrieve(link, '{}/image-0{}.jpg'.format(file_path, index))
+            urllib.request.urlretrieve(link, '{}/image-00{}.jpg'.format(file_path, index))
         elif content_type == 'image/jpeg':
-            urllib.request.urlretrieve(link, '{}/image-0{}.jpeg'.format(file_path,index))
+            urllib.request.urlretrieve(link, '{}/image-00{}.jpeg'.format(file_path,index))
         else:
             print('Unknown')
     except UnicodeEncodeError:
@@ -101,7 +109,7 @@ def download_all_images():
 
 def get_groupme_urls(): 
     url = 'https://image.groupme.com/pictures'
-    filepath = '/home/licentia/Desktop/groupmebot/bots/memes'
+    filepath = '<ENTER PATH IF YOU WANT TO DOWNLOAD IMAGES AGAIN>'
     for r, d, file in os.walk(filepath):
         for x in file:
             if '.jpeg' in x:
@@ -109,7 +117,7 @@ def get_groupme_urls():
                 image_request = requests.post(url, data=data, headers={'Content-Type': 'image/jpeg', 'X-Access-Token': '66fb4770467d0137eb6a227a6d5f8ad6' })
                 convert = image_request.text
                 load_json = json.loads(convert)
-                gurl = load_json.get('payload', {}).get("url",{})
+                gurl = load_json.get('payload', {}).get("picture_url",{})
                 print(gurl)
                 groupme_image_urls.append(gurl)
                 urlmodel = GMUrl()
@@ -120,7 +128,7 @@ def get_groupme_urls():
                 image_request = requests.post(url, data=data, headers={'Content-Type': 'image/gif', 'X-Access-Token': '66fb4770467d0137eb6a227a6d5f8ad6' })
                 convert = image_request.text
                 load_json = json.loads(convert)
-                gurl = load_json.get('payload', {}).get("url",{})
+                gurl = load_json.get('payload', {}).get("picture_url",{})
                 print(gurl)
                 urlmodel = GMUrl()
                 urlmodel.groupme_url = gurl
@@ -130,7 +138,7 @@ def get_groupme_urls():
                 image_request = requests.post(url, data=data, headers={'Content-Type': 'image/png', 'X-Access-Token': '66fb4770467d0137eb6a227a6d5f8ad6' })
                 convert = image_request.text
                 load_json = json.loads(convert)
-                gurl = load_json.get('payload', {}).get("url",{})
+                gurl = load_json.get('payload', {}).get("picture_url",{})
                 print(gurl)
                 groupme_image_urls.append(gurl)
                 urlmodel = GMUrl()
@@ -182,8 +190,8 @@ def timed_insult_message(selected_bot_id):
         print('Already used')
 
     if Insult.objects.filter(insult=select_insult).exists() == False:
-        if current_time == "15:05:20" or current_time == "15:10:20" or current_time == "15:40:00":
-            send_message_from_bot(bot_id, select_insult)
+        if current_time == "08:00:00" or current_time == "20:00:00":
+            send_message_from_bot(selected_bot_id, select_insult)
             insultmodel = Insult()
             insultmodel.insult = select_insult
             insultmodel.save()
@@ -196,12 +204,12 @@ def timed_tweet_message(selected_bot_id):
     current_time = time_checker.strftime("%H:%M:%S")
 
     select_tweet = random.choice(all_tweets)
-    if Tweet.objects.filter(insult=select_tweet).exists() == True:
+    if Tweet.objects.filter(tweet=select_tweet).exists() == True:
         print('Already used')
 
-    if Tweet.objects.filter(insult=select_tweet).exists() == False:
-        if current_time == "15:05:20" or current_time == "15:10:20" or current_time == "15:40:00":
-            send_message_from_bot(bot_id, select_tweet)
+    if Tweet.objects.filter(tweet=select_tweet).exists() == False:
+        if current_time == "08:00:00" or current_time == "20:00:00":
+            send_message_from_bot(selected_bot_id, select_tweet)
             tweetmodel = Tweet()
             tweetmodel.tweet = select_tweet
             tweetmodel.save()
@@ -213,18 +221,24 @@ def timed_meme_message(selected_bot_id):
     time_checker = datetime.now() 
     current_time = time_checker.strftime("%H:%M:%S")
 
-    select_meme = random.choice(groupme_image_urls)
-    if Meme.objects.filter(meme=select_meme).exists() == True:
-        print('Already used')
+    max_id = GMUrl.objects.all().aggregate(max_id=Max("id"))['max_id']
+    pk = random.randint(1, max_id) 
+    url = GMUrl.objects.filter(pk=pk).first() 
+    if url:
+        select_meme = url
+ 
+        if MemesSent.objects.filter(groupme_url=select_meme).exists() == True:
+            print('Already used')
 
-    if Meme.objects.filter(meme=select_meme).exists() == False:
-        #if current_time == "01:08:20" or current_time == "01:11:20" or current_time == "01:12:00":
-        send_message_from_bot(selected_bot_id, select_meme)
-        mememodel = Meme()
-        mememodel.meme = select_meme
-        mememodel.save()
-        #else:
-            #print("Do nothing %s" % current_time)
+        if MemesSent.objects.filter(groupme_url=select_meme).exists() == False:
+            if current_time == "16:20:00":
+                send_message_from_bot(selected_bot_id, select_meme)
+                model = MemesSent()
+                model.groupme_url = select_meme
+                model.save()
+                time.sleep(3)
+            else:
+                print("Do nothing %s" % current_time)
 
 ##########################################################
 #VIEW DATA THAT IS BEING STORED
@@ -263,13 +277,36 @@ def bot_detail(request, pk):
     template_name = 'bots/bot_detail.html' 
     bot_detail = Bot.objects.filter(pk=pk)
     bot = get_object_or_404(Bot, pk=pk)
+    #prob will add some bot -> Insult/Tweet/Meme foreign key relationship
     insults = Insult.objects.all().order_by('-date_posted')
+    tweets = Tweet.objects.all().order_by('-date_posted')
+    memes = MemesSent.objects.all().order_by('-date_posted')
+
     context = {
             'bot': bot, 
-            'insults': insults
+            'insults': insults,
+            'memes': memes, 
+            'tweets': tweets
             }
 
     return render(request, template_name, context) 
+
+def add_bot(request):
+    template_name = 'bots/add_bot.html'
+
+    if request.method == "POST":
+        bot_form = BotForm(request.POST)
+        if bot_form.is_valid():
+            bot = bot_form.save(commit=False)
+            bot.save()
+    else:
+        bot_form = BotForm() 
+
+    context = {
+            'bot_form': bot_form
+            }
+
+    return render(request, template_name, context)
 
 ##########################################################
 #START BOTS
@@ -292,7 +329,10 @@ def start_insult_bot(request):
 
     return redirect('/bots/list')
 
-
+#DO NOT HIT THIS URL, IT WILL GIVE YOU ERRORS,  This is what was used to get all the images
+#for this to work, edit the image path for the "GET GROUPME URLS and CHECK IMAGE TYPE" methods
+#edit the path to YOUR MACHINE so you can locally download memes
+#the memes are already scraped and in the memes folder so you don't really need to do this
 def scrape_memes(request): 
     template_name = 'bots/scrape.html' 
     if request.method == "GET":
@@ -305,6 +345,9 @@ def scrape_memes(request):
 @csrf_exempt
 def start_meme_bot(request):
     bot_id = request.POST.get('bot_id')
+
+    while True:
+        timed_meme_message(bot_id) 
 
 
     return redirect('/bots/list')

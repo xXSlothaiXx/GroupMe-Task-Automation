@@ -18,6 +18,8 @@ import pandas as pd
 
 image_array = []
 
+groupme_image_urls = []
+
 categories = ['americana',
         'artoftrolling',
         'cringe',
@@ -50,18 +52,18 @@ def get_memes():
 
 
 def check_image_type(link, index):
-    file_path = 'testing'
+    file_path = '<PATH TO IMAGES STORED>'
     try:
         check = requests.get(link)
         content_type = check.headers['content-type']
         if content_type == 'image/gif':
-            urllib.request.urlretrieve(link, '{}/image-{}.gif'.format(file_path, index))
+            urllib.request.urlretrieve(link, '{}/image-000{}.gif'.format(file_path, index))
         elif content_type == 'image/png':
-            urllib.request.urlretrieve(link, '{}/image-{}.png'.format(file_path, index))
+            urllib.request.urlretrieve(link, '{}/image-000{}.png'.format(file_path, index))
         elif content_type == 'image/jpg':
-            urllib.request.urlretrieve(link, '{}/image-{}.jpg'.format(file_path, index))
+            urllib.request.urlretrieve(link, '{}/image-000{}.jpg'.format(file_path, index))
         elif content_type == 'image/jpeg':
-            urllib.request.urlretrieve(link, '{}/image-{}.jpeg'.format(file_path,index))
+            urllib.request.urlretrieve(link, '{}/image-000{}.jpeg'.format(file_path,index))
         else:
             print('Unknown')
     except UnicodeEncodeError:
@@ -74,38 +76,49 @@ def download_all_images():
         print(image_index)
         image_index = image_index + 1 
         time.sleep(0.5)
-        
+    
 
 def get_groupme_urls(): 
     url = 'https://image.groupme.com/pictures'
-    filepath = '/home/licentia/Desktop/groupmebot/scraping/testing'
-
+    filepath = '<PATH TO IMAGES STORED>'
     for r, d, file in os.walk(filepath):
         for x in file:
+		#need to check the extension for each image and then send the request to groupme image service
             if '.jpeg' in x:
-                data = open('{}/{}'.format(filepath, x), 'rb').read() 
-                image_request = requests.post(url, data=data, headers={'Content-Type': 'image/jpeg', 'X-Access-Token': '66fb4770467d0137eb6a227a6d5f8ad6' })
+                data = open('{}/{}'.format(filepath, x), 'rb').read()
+                image_request = requests.post(url, data=data, headers={'Content-Type': 'image/jpeg', 'X-Access-Token': '<ACCESS TOKEN>' })
                 convert = image_request.text
                 load_json = json.loads(convert)
                 gurl = load_json.get('payload', {}).get("picture_url",{})
                 print(gurl)
-                
+                print(x)
+                groupme_image_urls.append(gurl)
+                time.sleep(1)
             elif '.gif' in x:
                 data = open('{}/{}'.format(filepath, x), 'rb').read()
-                image_request = requests.post(url, data=data, headers={'Content-Type': 'image/gif', 'X-Access-Token': '66fb4770467d0137eb6a227a6d5f8ad6' })
+                image_request = requests.post(url, data=data, headers={'Content-Type': 'image/gif', 'X-Access-Token': '<ACCESS TOKEN>' })
                 convert = image_request.text
                 load_json = json.loads(convert)
                 gurl = load_json.get('payload', {}).get("picture_url",{})
                 print(gurl)
-            elif '.png' in x: 
-                data = open('{}/{}'.format(filepath, x), 'rb').read() 
-                image_request = requests.post(url, data=data, headers={'Content-Type': 'image/png', 'X-Access-Token': '66fb4770467d0137eb6a227a6d5f8ad6' })
+                print(x)
+                groupme_image_urls.append(gurl)
+                time.sleep(1)
+                
+            elif '.png' in x:
+                data = open('{}/{}'.format(filepath, x), 'rb').read()
+                image_request = requests.post(url, data=data, headers={'Content-Type': 'image/png', 'X-Access-Token': '<ACCESS TOKEN>' })
                 convert = image_request.text
                 load_json = json.loads(convert)
                 gurl = load_json.get('payload', {}).get("picture_url",{})
                 print(gurl)
+                print(x)
+                groupme_image_urls.append(gurl)
+
+		#you can write logic here to add your url to the django database
             else: 
-                print('Fuck if i know') 
+                print('Fuck if i know')
+
 
 get_groupme_urls()
 

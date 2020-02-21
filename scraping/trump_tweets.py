@@ -1,7 +1,5 @@
 
 
-
-
 def get_trump_tweets():
     url = "https://twitter.com/realDonaldTrump"
     response_status  = requests.get(url) 

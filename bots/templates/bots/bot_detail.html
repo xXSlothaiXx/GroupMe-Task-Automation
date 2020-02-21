@@ -9,12 +9,9 @@
 	      <h1 class="my-4">{{bot.name}}
           <small>Yeet</small>
         </h1>
-
-
-        <hr>
-
-
-        <br> 
+        <br>
+        <hr> 
+        <h3> Insults Sent </h3>
       <div class="list-group">
 
         {%for insult in insults%}
@@ -26,10 +23,57 @@
             <small class="text-muted">{{insult.date_posted}}</small>
           </div>
           <p class="mb-1" style="color:  #078ecd; ">{{insult.insult}}</p>
-          <small class="text-muted">Donec id elit non mi porta.</small>
+          <small class="text-muted">Insult generator.</small>
         </a>
 
        
+        {%endfor%}
+
+        <br>
+      </div>
+
+      <hr>
+
+      <h3> Memes Sent </h3>
+
+       <div class="list-group">
+
+        {%for meme in memes%}
+       
+     
+    <a href="{%url 'bot-detail' bot.id%}" class="list-group-item list-group-item-action flex-column align-items-start">
+          <div class="d-flex w-100 justify-content-between">
+      <h5 class="mb-1">{{bot.name}}</h5>
+            <small class="text-muted">{{meme.date_posted}}</small>
+          </div>
+          <p class="mb-1" style="color:  #078ecd; ">{{meme.groupme_url}}</p>
+          <small class="text-muted">Meme Generator</small>
+        </a>
+
+       
+        {%endfor%}
+
+        <br>
+      </div>
+      <br> 
+      <hr> 
+
+      <h3> Tweets Sent </h3>
+
+       <div class="list-group">
+
+        {%for tweet in tweets%}
+       
+     
+    <a href="{%url 'bot-detail' bot.id%}" class="list-group-item list-group-item-action flex-column align-items-start">
+          <div class="d-flex w-100 justify-content-between">
+      <h5 class="mb-1">{{bot.name}}</h5>
+            <small class="text-muted">{{tweet.date_posted}}</small>
+          </div>
+          <p class="mb-1" style="color:  #078ecd; ">{{tweet.tweet}}</p>
+          <small class="text-muted">Tweets from donald trump</small>
+        </a>
+
         {%endfor%}
 
         <br>
@@ -51,20 +95,6 @@
 
       <!-- Sidebar Widgets Column -->
       <div class="col-md-4">
-
-         <div class="card my-4">
-          <h5 class="card-header">All bots</h5>
-          <div class="card-body">
-
-            All of bots that are using the insult scraper
-         
-          </div>
-        </div>
-
-      
-
-    
-
 
         <!-- Side Widget -->
         <div class="card my-4">
