@@ -12,6 +12,7 @@ import sys
 import json
 import pandas as pd
 
+
 #we are building a meme bot
 #we will get the links from the memes
 #and then we will we add it to the database 
