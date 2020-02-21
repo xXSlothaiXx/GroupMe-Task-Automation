@@ -6,3 +6,9 @@ This application requires Python 3++ and the Django Web Framework
 
 ### Django Framework setup
 https://docs.djangoproject.com/en/3.0/topics/install/
+
+### Install Crispy Forms for Django
+```
+pip3 install django-crispy-forms
+```
+
