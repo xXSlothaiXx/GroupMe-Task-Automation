@@ -54,6 +54,9 @@ python3 manage.py runserver
 
 ## Navigating the WEB APP
 
+### Getting your memes and URL's 
+Go to http://127.0.0.1:8000/bots/scrape and scrape the memes. If it's working you should see groupme urls pop up in the terminal. Wait till it is done so that all the urls will be added to the database. Once it's done you can go to http://127.0.0.1:8000/admin -> login and see if the urls loaded under the GMUrls model 
+
 ### Adding bots
 Go to http://127.0.0.1:8000/bots/create to enter your bot name and bot id
 
@@ -61,7 +64,7 @@ Go to http://127.0.0.1:8000/bots/create to enter your bot name and bot id
 Go to http://127.0.0.1:8000/bots/list to see all your bots. Click on the bot and it should bring you to another page with a few options
 
 ### Using the message sending options
-There are three options that you can use on the web app
+There are  options that you can use on the web app to send certain types of messages with certain time limtits
 
 ### You can only select ONE option
 Once you select your option, Press Start Bot and let the applciation run in the background, The app will show a loading sign in the browser. Leave this page open and open another tab to see what your bot has sent 
@@ -74,6 +77,9 @@ This option will generate random insults and your bot will send them everyday at
 
 #### The Meme Option
 This option will send memes from the /memes directory and the django Application. This will send random memes everyday at 4:20 pm
+
+### Loop message options (For Testing) 
+If you use one of the loop testing methods, it will send messages every 60 seconds to make sure your access token is working
 
 #### Editing the time stamps
 If you want to edit the timing of your messages for the bots. Go to the views.py fle in the bots application and go to lines 193-194, 212-213, 236-237 and change the times to whatever you want
