@@ -8,9 +8,6 @@ urlpatterns = [
     #listing bots
     url(r'^list/', views.bots, name='view-bots'),
     url(r'^bot/(?P<pk>[\w-]+)/$', views.bot_detail, name='bot-detail'),
-    #listing data
-    url(r'^tweets/', views.view_tweets, name='view-tweets'), 
-    url(r'^insults/', views.view_insults, name='view-tweets'),
     #scraping data 
     url(r'^scrape/', views.scrape_memes, name='scrape-memes'),
     #start bots

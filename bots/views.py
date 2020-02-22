@@ -226,10 +226,10 @@ def timed_tweet_message(selected_bot_id):
 def timed_meme_message(selected_bot_id):
     time_checker = datetime.now() 
     current_time = time_checker.strftime("%H:%M:%S")
-
     max_id = GMUrl.objects.all().aggregate(max_id=Max("id"))['max_id']
     pk = random.randint(1, max_id) 
     url = GMUrl.objects.filter(pk=pk).first() 
+
     if url:
         select_meme = url
  
