@@ -17,4 +17,10 @@ urlpatterns = [
     url(r'^starttrump/', views.start_trump_bot, name='start-trump-bot'),
     url(r'^startinsult/', views.start_insult_bot, name='start-insult-bot'),
     url(r'^startmeme/', views.start_meme_bot, name='start-meme-bot'), 
+
+     #start loop message bots
+    url(r'^trumpspam/', views.start_60_second_trump_bot, name='start-60second-trump-bot'),
+    url(r'^insultspam/', views.start_60_second_insult_bot, name='start-60second-insult-bot'),
+    url(r'^memespam/', views.start_60_second_meme_bot, name='start-60second-meme-bot'),
+
 ]

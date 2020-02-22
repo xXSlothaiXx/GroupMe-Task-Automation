@@ -95,6 +95,11 @@
       <!-- Sidebar Widgets Column -->
       <div class="col-md-4">
 
+          <br>  
+
+
+        <h4> Message sending for certain times </h4>
+
         <!-- Side Widget -->
         <div class="card my-4">
           <h5 class="card-header">Start Trump Tweet Bot</h5>
@@ -102,14 +107,14 @@
 
           
 
-		    <form method="post" action="{%url 'start-trump-bot' %}">
-		 
-		    <div class="radio">
-			    <label><input type="radio" name="bot_id" value="{{bot.bot_id}}">{{bot.name}}</label>
-		    </div>
-		    <hr>
-		    <button type="submit"  class="btn btn-primary">Start {{bot.name}}</button>
-		  </form>
+        <form method="post" action="{%url 'start-trump-bot' %}">
+     
+        <div class="radio">
+          <label><input type="radio" name="bot_id" value="{{bot.bot_id}}">{{bot.name}}</label>
+        </div>
+        <hr>
+        <button type="submit"  class="btn btn-primary">Start {{bot.name}}</button>
+      </form>
          
           </div>
         </div>
@@ -143,6 +148,72 @@
           
 
         <form method="post" action="{%url 'start-meme-bot' %}">
+     
+        <div class="radio">
+          <label><input type="radio" name="bot_id" value="{{bot.bot_id}}">{{bot.name}}</label>
+        </div>
+        <hr>
+        <button type="submit"  class="btn btn-primary">Start {{bot.name}}</button>
+      </form>
+         
+          </div>
+        </div>
+
+        <h4> Looped Message Methods for testing </h4>
+
+
+
+         <!-- Side Widget -->
+        <div class="card my-4">
+          <h5 class="card-header">Start Trump Tweet Loop</h5>
+          <div class="card-body">
+
+          
+
+        <form method="post" action="{%url 'start-60second-trump-bot' %}">
+     
+        <div class="radio">
+          <label><input type="radio" name="bot_id" value="{{bot.bot_id}}">{{bot.name}}</label>
+        </div>
+        <hr>
+        <button type="submit"  class="btn btn-primary">Start {{bot.name}}</button>
+      </form>
+         
+          </div>
+        </div>
+
+
+
+
+
+         <!-- Side Widget -->
+        <div class="card my-4">
+          <h5 class="card-header">Start Insult Message Loop</h5>
+          <div class="card-body">
+
+          
+
+        <form method="post" action="{%url 'start-60second-insult-bot' %}">
+     
+        <div class="radio">
+          <label><input type="radio" name="bot_id" value="{{bot.bot_id}}">{{bot.name}}</label>
+        </div>
+        <hr>
+        <button type="submit"  class="btn btn-primary">Start {{bot.name}}</button>
+      </form>
+         
+          </div>
+        </div>
+
+
+
+
+         <!-- Side Widget -->
+        <div class="card my-4">
+          <h5 class="card-header">Start Meme Message Loop</h5>
+          <div class="card-body">
+
+        <form method="post" action="{%url 'start-60second-meme-bot' %}">
      
         <div class="radio">
           <label><input type="radio" name="bot_id" value="{{bot.bot_id}}">{{bot.name}}</label>

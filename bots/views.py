@@ -82,7 +82,8 @@ def get_memes():
 
 def check_image_type(link, index):
     # path would be something like 'home/user/Desktop/groupmebot/bots/memes'
-    file_path = '<ENTER PATH IF YOU WANT TO DOWNLOAD IMAGES AGAIN>'
+    current_path = os.path.dirname(os.path.abspath(__file__))
+    file_path = os.path.join(current_path, 'memes')
     try:
         check = requests.get(link)
         content_type = check.headers['content-type']
@@ -109,7 +110,9 @@ def download_all_images():
 
 def get_groupme_urls(): 
     url = 'https://image.groupme.com/pictures'
-    filepath = '<ENTER PATH IF YOU WANT TO DOWNLOAD IMAGES AGAIN>'
+    current_path = os.path.dirname(os.path.abspath(__file__))
+    filepath = os.path.join(current_path, 'memes')
+
     for r, d, file in os.walk(filepath):
         for x in file:
             if '.jpeg' in x:
@@ -145,7 +148,8 @@ def get_groupme_urls():
                 urlmodel.groupme_url = gurl
                 urlmodel.save()
             else: 
-                print('Fuck if i know') 
+                print('Unknown Extension') 
+ 
 
 
 def get_trump_tweets():
@@ -251,6 +255,38 @@ def timed_meme_message(selected_bot_id):
             #time.sleep(3) Set the timing however you please
 
 ##########################################################
+#METHODS FOR MESSAGES THAT SEND WITH TIME LIMIT
+##########################################################
+
+#THESE METHODS ARE TO TEST THAT YOUR TOKEN IS WORKING!!
+#Be careful with how you use these. The meme sender has an API call limit, Try not send messages on a loop forever
+
+#send a meme every 60 seconds
+def minute_meme(selected_bot_id):
+    max_id = GMUrl.objects.all().aggregate(max_id=Max("id"))['max_id']
+    pk = random.randint(1, max_id)
+    url = GMUrl.objects.filter(pk=pk).first()
+
+    if url: 
+        select_meme = url 
+        send_message_from_bot(selected_bot_id, select_meme)
+        time.sleep(60) #send meme every 60 seconds
+
+#send an insult every 60 seconds
+def minute_insult(selected_bot_id): 
+     select_insult = random.choice(insults)
+     send_message_from_bot(selected_bot_id, select_insult)
+     time.sleep(60)
+
+# send a tweet from donald trump every 60 seconds
+def minute_tweet(selected_bot_id):
+    select_tweet = random.choice(all_tweets)
+    send_message_from_bot(selected_bot_id, select_tweet) 
+    time.sleep(60)
+
+
+
+##########################################################
 #VIEW DATA THAT IS BEING STORED
 ##########################################################
 def view_insults(request):
@@ -339,25 +375,54 @@ def start_insult_bot(request):
 
     return redirect('/bots/list')
 
-#DO NOT HIT THIS URL, IT WILL GIVE YOU ERRORS,  This is what was used to get all the images
+@csrf_exempt
+def start_meme_bot(request):
+    bot_id = request.POST.get('bot_id')
+    while True:
+        timed_meme_message(bot_id) 
+
+
+    return redirect('/bots/list')
+
+
+##########################################################
+#START MESSAGE LOOP BOTS (made for testing purposes)
+##########################################################
+@csrf_exempt
+def start_60_second_trump_bot(request):
+    bot_id = request.POST.get('bot_id')
+    get_trump_tweets()
+    while True:
+        minute_tweet(bot_id) 
+
+    return redirect('/bots/list/')
+
+@csrf_exempt
+def start_60_second_insult_bot(request):
+    bot_id = request.POST.get('bot_id')
+    get_insults()
+    while True:
+        minute_insult(bot_id)
+
+    return redirect('/bots/list')
+
+@csrf_exempt
+def start_60_second_meme_bot(request):
+    bot_id = request.POST.get('bot_id')
+    while True:
+        minute_meme(bot_id)
+
+    return redirect('/bots/list')
+
+
+#DO NOT HIT THIS URL more than once, IT WILL GIVE YOU ERRORS,  This is what was used to get all the images
 #for this to work, edit the image path for the "GET GROUPME URLS and CHECK IMAGE TYPE" methods
 #edit the path to YOUR MACHINE so you can locally download memes
 #the memes are already scraped and in the memes folder so you don't really need to do this
 def scrape_memes(request): 
     template_name = 'bots/scrape.html' 
     if request.method == "GET":
-        get_memes() 
-        download_all_images()
         get_groupme_urls() 
 
     return render(request, template_name) 
 
-@csrf_exempt
-def start_meme_bot(request):
-    bot_id = request.POST.get('bot_id')
-
-    while True:
-        timed_meme_message(bot_id) 
-
-
-    return redirect('/bots/list')
